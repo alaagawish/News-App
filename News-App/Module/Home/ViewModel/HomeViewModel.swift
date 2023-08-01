@@ -11,7 +11,7 @@ class HomeViewModel {
     var network: NetworkProtocol!
     var localSource: LocalSourceProtocol
     var passArticlesToViewController: (()->()) = {}
-    var articles: [Article]!{
+    var articles: [Article] = []{
         didSet{
             passArticlesToViewController()
         }
@@ -30,11 +30,11 @@ class HomeViewModel {
     }
     func saveArticlesLocal() {
         for article in articles {
-            localSource.insertArticle(article: LocalArticle(author: article.author ?? "", source: LocalSource(id: article.source.id ?? "",name: article.source.name), title: article.title, description: article.description, url: article.url, urlToImage: article.urlToImage ?? "", content: article.content, publishedAt: article.publishedAt, isFav: false))
+            localSource.insertArticle(article: LocalArticle(author: article.author ?? "", source: LocalSource(id: article.source.id ?? "",name: article.source.name), title: article.title ?? "", description: article.description ?? "", url: article.url, urlToImage: article.urlToImage ?? "", content: article.content, publishedAt: article.publishedAt, isFav: false))
         }
     }
     func getSavedArticles() -> [Article] {
-        var articles = localSource.getArticlesFromLocal()
+        let articles = localSource.getArticlesFromLocal()
         var localArticles: [Article] = []
         for article in articles {
             if article.isFav == false {

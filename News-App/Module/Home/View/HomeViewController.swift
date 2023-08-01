@@ -76,7 +76,7 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource, UIColl
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: Constants.articleCell, for: indexPath) as! ArticleTableViewCell
-        cell.setValues(title: articles[indexPath.row].title , author: articles[indexPath.row].author ?? "" , image: articles[indexPath.row].urlToImage ?? ""  )
+        cell.setValues(title: articles[indexPath.row].title ?? "" , author: articles[indexPath.row].author ?? "" , image: articles[indexPath.row].urlToImage ?? ""  )
         return cell
     }
     

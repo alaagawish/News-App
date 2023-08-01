@@ -92,11 +92,11 @@ class Local: LocalSourceProtocol{
         } catch let error {
             print(error.localizedDescription)
         }
-        
-        for article in favArticles {
-            addFav(article: article)
+        if !favArticles.isEmpty {
+            for article in favArticles {
+                addFav(article: article)
+            }
         }
-        
     }
     
 }
