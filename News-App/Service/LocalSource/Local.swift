@@ -9,6 +9,7 @@ import Foundation
 import RealmSwift
 
 class Local: LocalSourceProtocol{
+    
     static let instance = Local()
     
     let realm: Realm

@@ -9,10 +9,11 @@ import Foundation
 protocol LocalSourceProtocol{
     func insertArticle(article: LocalArticle)
     
-    func getArticalsFromLocal() -> [LocalArticle]
+    func getArticlesFromLocal() -> [LocalArticle]
     
-    func getArticalFromLocal(title: String)  -> LocalArticle?
+    func getArticleFromLocal(title: String)  -> LocalArticle?
     
-    func deleteFromLocal(title: String)
+    func deleteFromLocal(article:LocalArticle)
+    
     func isFavourite(title:String) -> Bool
 }
