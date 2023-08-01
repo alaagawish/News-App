@@ -26,7 +26,7 @@ class FavouritesViewModel {
     }
     
     func getArticles() {
-        articles = localSource.getArticlesFromLocal()
+        articles = localSource.getArticlesFromLocal().filter{$0.isFav == true}
         
     }
     

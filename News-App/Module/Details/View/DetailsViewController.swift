@@ -22,7 +22,7 @@ class DetailsViewController: UIViewController {
     var detailsViewModel: DetailsViewModel!
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+      
         articleURL.text = article.url
         articleDate.text = article.publishedAt
         articleTitle.text = article.title
@@ -34,7 +34,20 @@ class DetailsViewController: UIViewController {
         articleImage.kf.setImage(with: url,
                                  placeholder: UIImage(named: Constants.noImg))
         detailsViewModel = DetailsViewModel(localSource: Local.instance)
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(labelTapped))
+        articleURL.isUserInteractionEnabled = true
+        articleURL.addGestureRecognizer(tapGesture)
     }
+    @objc func labelTapped() {
+             
+        if let url = URL(string: article.url) {
+                if UIApplication.shared.canOpenURL(url) {
+                    UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                } else {
+                    print("Cannot open URL: \(url)")
+                }
+            }
+        }
     override func viewWillAppear(_ animated: Bool) {
         
         if  detailsViewModel.checkFav(article: article) {
@@ -45,7 +58,8 @@ class DetailsViewController: UIViewController {
         
         
     }
-    @IBAction func goBack(_ sender: Any) {
+  
+    @IBAction func goBack(_ sender: UIButton) {
         self.dismiss(animated: true)
     }
     

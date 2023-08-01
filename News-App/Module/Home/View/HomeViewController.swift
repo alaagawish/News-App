@@ -7,40 +7,62 @@
 
 import UIKit
 import Reachability
+import RxSwift
+import RxCocoa
 
-class HomeViewController: UIViewController {
+class HomeViewController: UIViewController, UISearchBarDelegate {
     
+    @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var articleTable: UITableView!
     var articles: [Article] = []
+    var searchArticles: [Article] = []
     var homeViewModel: HomeViewModel!
-    
+    var disposeBag: DisposeBag!
     override func viewDidLoad() {
         super.viewDidLoad()
+        disposeBag = DisposeBag()
         homeViewModel = HomeViewModel(network: Network(), localSource: Local.instance)
-        
         
         self.articleTable.register(UINib(nibName: Constants.articleTableViewCell, bundle: nil), forCellReuseIdentifier: Constants.articleCell)
         
         homeViewModel.passArticlesToViewController = {
             [weak self] in self?.articles = self?.homeViewModel.articles ?? []
+            self?.searchArticles = self?.articles ?? []
             self?.articleTable.reloadData()
             self?.homeViewModel.saveArticlesLocal()
+            self?.search()
         }
         homeViewModel.getData()
-        
+        search()
+    }
+    
+    func search() {
+        searchBar.rx.text.subscribe{[weak self] text in
+            guard let self = self else {return}
+            self.filter(searchText: text!)
+        }.disposed(by: disposeBag)
+    }
+    
+    func filter(searchText:String) {
+            if(!searchText.isEmpty) {
+            articles = searchArticles.filter{ $0.title!.contains(searchText.lowercased())}
+            if articles.isEmpty {
+                articles = searchArticles
+            }
+        }else {
+            articles = searchArticles
+        }
+        self.articleTable.reloadData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         let reachability = try! Reachability()
         if reachability.connection != .unavailable {
-            print("Network is available")
             homeViewModel.deleteAll()
             homeViewModel.getData()
             
-            
         } else {
-            print("Network is not available")
-            
+           
             articles = homeViewModel.getSavedArticles()
             articleTable.reloadData()
             let alert : UIAlertController = UIAlertController(title: Constants.internetConnection, message: Constants.checkConnection, preferredStyle: .alert)
