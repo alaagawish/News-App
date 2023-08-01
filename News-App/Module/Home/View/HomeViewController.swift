@@ -61,9 +61,9 @@ class HomeViewController: UIViewController, UISearchBarDelegate {
     
     func filter(searchText:String) {
         if(!searchText.isEmpty) {
-            articles = searchArticles.filter{ $0.title!.contains(searchText.lowercased())}
+            articles = searchArticles.filter{ $0.title!.lowercased().contains(searchText.lowercased())}
             if articles.isEmpty {
-                articles = searchArticles
+                articles = []
             }
         }else {
             articles = searchArticles
