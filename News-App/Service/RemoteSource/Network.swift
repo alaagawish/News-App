@@ -11,7 +11,9 @@ import Alamofire
 class Network: NetworkProtocol{
     func getData(path: String, parameters: Alamofire.Parameters, handler: @escaping (NewsResponse?) -> Void) {
         
-        AF.request("https://newsapi.org/v2/everything?from=2023-07-01&sortBy=publishedAt&q=tesla&apiKey=f707f8e87fcb49118d3d12ca797cde81",parameters: parameters).responseDecodable(of: NewsResponse.self) { response in
+        let date = getCurrentDate()
+        
+        AF.request(Constants.url).responseDecodable(of: NewsResponse.self) { response in
             switch response.result {
             case .success(let data):
                 handler(data)
@@ -22,6 +24,12 @@ class Network: NetworkProtocol{
         }
     }
     
-    
+    func getCurrentDate() -> String {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: Constants.en)
+        formatter.dateFormat = Constants.dateFormat
+        return formatter.string(from: Date())
+    }
     
 }
+

@@ -9,6 +9,11 @@ import Foundation
 import RealmSwift
 
 class LocalSource: Object {
-    @Persisted var id: String
-    @Persisted var name: String
+    @Persisted var id: String = ""
+    @Persisted var name: String = ""
+    convenience init(id: String, name: String) {
+        self.init()
+        self.id = id
+        self.name = name
+    }
 }

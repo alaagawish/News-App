@@ -28,6 +28,17 @@ class Local: LocalSourceProtocol{
         }
     }
     
+    func addFav(article: LocalArticle) {
+        do {
+            article.isFav = true
+            realm.beginWrite()
+            realm.add(article)
+            try realm.commitWrite()
+        } catch let error {
+            print(error.localizedDescription)
+        }
+    }
+    
     func getArticlesFromLocal() -> [LocalArticle] {
         return Array(realm.objects(LocalArticle.self))
     }
@@ -58,12 +69,34 @@ class Local: LocalSourceProtocol{
         let allArticlesList = getArticlesFromLocal()
         
         for article in allArticlesList {
-            if(article.title == title ) {
+            if(article.title == title && article.isFav == true) {
                 return true
             }
         }
         return false
     }
     
+    func deleteAll() {
+        var allArticles = getArticlesFromLocal()
+        var favArticles: [LocalArticle] = []
+        for article in allArticles {
+            if article.isFav == true {
+                favArticles.append(article)
+            }
+        }
+        do {
+            realm.beginWrite()
+            realm.deleteAll()
+            try realm.commitWrite()
+            
+        } catch let error {
+            print(error.localizedDescription)
+        }
+        
+        for article in favArticles {
+            addFav(article: article)
+        }
+        
+    }
     
 }

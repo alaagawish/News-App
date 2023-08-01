@@ -6,6 +6,7 @@
 //
 
 import Foundation
+
 protocol LocalSourceProtocol{
     func insertArticle(article: LocalArticle)
     
@@ -13,7 +14,12 @@ protocol LocalSourceProtocol{
     
     func getArticleFromLocal(title: String)  -> LocalArticle?
     
+    func addFav(article: LocalArticle)
+    
     func deleteFromLocal(article:LocalArticle)
     
     func isFavourite(title:String) -> Bool
+    
+    func deleteAll()
+       
 }

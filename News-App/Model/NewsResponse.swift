@@ -8,7 +8,7 @@
 import Foundation
 
 struct NewsResponse: Decodable{
-    let status: String?
-    let totalResult: Int?
-    let articles: [Article]?
+    let status: String
+    let totalResults: Int
+    let articles: [Article]
 }
