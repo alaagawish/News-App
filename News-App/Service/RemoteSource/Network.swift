@@ -12,7 +12,6 @@ class Network: NetworkProtocol{
     func getData(path: String, parameters: Alamofire.Parameters, handler: @escaping (NewsResponse?) -> Void) {
         
         AF.request(Constants.url).responseDecodable(of: NewsResponse.self) { response in
-            print(response)
             switch response.result {
             case .success(let data):
                 handler(data)

@@ -9,6 +9,7 @@ import UIKit
 
 class FavouritesViewController: UIViewController {
     
+    @IBOutlet weak var noItems: UILabel!
     @IBOutlet weak var articlesTable: UITableView!
     var articles: [LocalArticle] = []
     var favouritesViewModel: FavouritesViewModel!
@@ -23,11 +24,21 @@ class FavouritesViewController: UIViewController {
         }
         favouritesViewModel.getArticles()
     }
+    override func viewWillAppear(_ animated: Bool) {
+        favouritesViewModel.getArticles()
+    }
         
 }
 
 extension FavouritesViewController: UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegateFlowLayout {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if articles.count == 0 {
+            noItems.isHidden = false
+            articlesTable.isHidden = true
+        }else{
+            noItems.isHidden = true
+            articlesTable.isHidden = false
+        }
         return articles.count
     }
     
@@ -52,7 +63,7 @@ extension FavouritesViewController: UITableViewDelegate, UITableViewDataSource, 
         alert.addAction(UIAlertAction(title: Constants.yes, style: .default,handler: { [weak self] action in
                         
             self?.favouritesViewModel.deleteArticle(article: (self?.articles[indexPath.row])!)
-            self?.articles.remove(at: indexPath.row)
+           
             self?.articlesTable.reloadData()
             
         }))

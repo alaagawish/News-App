@@ -22,7 +22,7 @@ class HomeViewController: UIViewController, UISearchBarDelegate {
         super.viewDidLoad()
         disposeBag = DisposeBag()
         homeViewModel = HomeViewModel(network: Network(), localSource: Local.instance)
-        
+        searchBar.delegate = self
         self.articleTable.register(UINib(nibName: Constants.articleTableViewCell, bundle: nil), forCellReuseIdentifier: Constants.articleCell)
         
         homeViewModel.passArticlesToViewController = {
@@ -34,7 +34,23 @@ class HomeViewController: UIViewController, UISearchBarDelegate {
         }
         homeViewModel.getData()
         search()
+        pullToRefresh()
     }
+    
+    
+    func pullToRefresh() {
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        articleTable.refreshControl = refreshControl
+    }
+    
+    
+    @objc func refresh() {
+        homeViewModel.getData()
+        articleTable.reloadData()
+        articleTable.refreshControl?.endRefreshing()
+    }
+    
     
     func search() {
         searchBar.rx.text.subscribe{[weak self] text in
@@ -44,7 +60,7 @@ class HomeViewController: UIViewController, UISearchBarDelegate {
     }
     
     func filter(searchText:String) {
-            if(!searchText.isEmpty) {
+        if(!searchText.isEmpty) {
             articles = searchArticles.filter{ $0.title!.contains(searchText.lowercased())}
             if articles.isEmpty {
                 articles = searchArticles
@@ -58,11 +74,11 @@ class HomeViewController: UIViewController, UISearchBarDelegate {
     override func viewWillAppear(_ animated: Bool) {
         let reachability = try! Reachability()
         if reachability.connection != .unavailable {
-            homeViewModel.deleteAll()
+           // homeViewModel.deleteAll()
             homeViewModel.getData()
             
         } else {
-           
+            
             articles = homeViewModel.getSavedArticles()
             articleTable.reloadData()
             let alert : UIAlertController = UIAlertController(title: Constants.internetConnection, message: Constants.checkConnection, preferredStyle: .alert)
@@ -103,11 +119,11 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource, UIColl
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: self.view.frame.width, height: 50)
+        return CGSize(width: self.view.frame.width, height: 70)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return CGFloat(90)
+        return CGFloat(100)
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

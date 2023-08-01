@@ -33,6 +33,7 @@ class Local: LocalSourceProtocol{
             article.isFav = true
             realm.beginWrite()
             realm.add(article)
+            print("add donnnnnnne")
             try realm.commitWrite()
         } catch let error {
             print(error.localizedDescription)
@@ -56,11 +57,20 @@ class Local: LocalSourceProtocol{
     }
     
     func deleteFromLocal(article: LocalArticle) {
+        let allArticlesList = getArticlesFromLocal()
+        var articleObj: LocalArticle!
+        for article in allArticlesList {
+            if(article.title == article.title && article.isFav ) {
+                articleObj = article
+                break
+            }
+        }
         do {
             realm.beginWrite()
-            realm.delete(article)
+            realm.delete(articleObj)
             try realm.commitWrite()
         } catch let error {
+            
             print(error.localizedDescription)
         }
     }
@@ -77,7 +87,7 @@ class Local: LocalSourceProtocol{
     }
     
     func deleteAll() {
-        var allArticles = getArticlesFromLocal()
+        let allArticles = getArticlesFromLocal()
         var favArticles: [LocalArticle] = []
         for article in allArticles {
             if article.isFav == true {
@@ -88,11 +98,12 @@ class Local: LocalSourceProtocol{
             realm.beginWrite()
             realm.deleteAll()
             try realm.commitWrite()
-            
         } catch let error {
+         
             print(error.localizedDescription)
         }
-        if !favArticles.isEmpty {
+        print(favArticles.count)
+        if  favArticles.count > 0 {
             for article in favArticles {
                 addFav(article: article)
             }

@@ -22,7 +22,7 @@ class DetailsViewController: UIViewController {
     var detailsViewModel: DetailsViewModel!
     override func viewDidLoad() {
         super.viewDidLoad()
-      
+        
         articleURL.text = article.url
         articleDate.text = article.publishedAt
         articleTitle.text = article.title
@@ -39,15 +39,15 @@ class DetailsViewController: UIViewController {
         articleURL.addGestureRecognizer(tapGesture)
     }
     @objc func labelTapped() {
-             
+        
         if let url = URL(string: article.url) {
-                if UIApplication.shared.canOpenURL(url) {
-                    UIApplication.shared.open(url, options: [:], completionHandler: nil)
-                } else {
-                    print("Cannot open URL: \(url)")
-                }
+            if UIApplication.shared.canOpenURL(url) {
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            } else {
+                print("Cannot open URL: \(url)")
             }
         }
+    }
     override func viewWillAppear(_ animated: Bool) {
         
         if  detailsViewModel.checkFav(article: article) {
@@ -58,12 +58,12 @@ class DetailsViewController: UIViewController {
         
         
     }
-  
+    
     @IBAction func goBack(_ sender: UIButton) {
         self.dismiss(animated: true)
     }
     
-    @IBAction func addFavourite(_ sender: Any) {
+    @IBAction func addFavourite(_ sender: UIButton) {
         if favouriteButton.currentImage ==  UIImage(systemName: Constants.heart) {
             detailsViewModel.addToFav(article: article)
             favouriteButton.setImage(UIImage(systemName: Constants.fillHeart), for: .normal)
@@ -74,9 +74,10 @@ class DetailsViewController: UIViewController {
             
             alert.addAction(UIAlertAction(title: Constants.yes, style: .default,handler: { [weak self] action in
                 print("delete begin")
-                print("heart fill")
+               
                 
                 self?.favouriteButton.setImage(UIImage(systemName: Constants.heart), for: .normal)
+                print("heart fill")
                 self?.detailsViewModel.removeFromFav(article: (self?.article)!)
                 
             }))
@@ -84,5 +85,4 @@ class DetailsViewController: UIViewController {
             self.present(alert, animated: true, completion: nil)
         }
     }
-    
 }
