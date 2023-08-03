@@ -22,5 +22,5 @@ class Constants {
     static let fillHeart = "heart.fill"
     static let heart = "heart"
     static let dateFormat = "yyyy-MM-dd"
-    static let url = "https://newsapi.org/v2/everything?from=2023-07-01&sortBy=publishedAt&q=tesla&apiKey=f707f8e87fcb49118d3d12ca797cde81"
+    static let url = "https://newsapi.org/v2/everything?from=2023-08-01&sortBy=publishedAt&q=tesla&apiKey=932ef73482d74c93a1cb339a60c4152e"
 }
